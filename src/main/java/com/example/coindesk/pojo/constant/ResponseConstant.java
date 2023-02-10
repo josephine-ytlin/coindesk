@@ -2,7 +2,7 @@ package com.example.coindesk.pojo.constant;
 
 public class ResponseConstant {
     public static final String TIME = "time";
-    public static final String UPDATED = "updated";
+    public static final String UPDATEDISO = "updatedISO";
 
     
     

@@ -1,9 +1,14 @@
 package com.example.coindesk.util;
 
+import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.Date;
+import java.util.Locale;
 
 import org.joda.time.DateTime;
+import org.joda.time.format.DateTimeFormat;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,8 +17,12 @@ import org.springframework.web.client.RestTemplate;
 import com.google.gson.Gson;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
+
+import jakarta.xml.bind.DatatypeConverter;
+
 import com.example.coindesk.pojo.constant.ResponseConstant;
 import com.example.coindesk.entity.Coindesk;
+import java.time.format.DateTimeFormatter;
 
 
 
@@ -40,10 +49,12 @@ public class CallCoinDesk {
             JsonObject json = new Gson().fromJson(objects, JsonObject.class);
 
             JsonElement timeJson = json.getAsJsonObject().get(ResponseConstant.TIME);
-            String updateTime =timeJson.getAsJsonObject().get(ResponseConstant.UPDATED).getAsString();
-            SimpleDateFormat parser = new SimpleDateFormat("YYYY/MM/DD HH:mm:ss");
-            Date date = parser.parse(updateTime);
-            coinDesk.setUpdate_date(date);
+            String updateTime =timeJson.getAsJsonObject().get(ResponseConstant.UPDATEDISO).getAsString().substring(0, 18);
+
+            
+            org.joda.time.format.DateTimeFormatter formatter = DateTimeFormat.forPattern("yyyy-MM-dd'T'HH:mm:ss");
+            String dt = formatter.parseDateTime(updateTime).toString("YYYY/MM/DD HH:mm:ss");
+            coinDesk.setUpdateDate(dt);
             
             JsonElement bpiJson = json.getAsJsonObject().get(ResponseConstant.BPI);
 
@@ -51,7 +62,7 @@ public class CallCoinDesk {
             String codeUS =jsonUS.get(ResponseConstant.CODE).getAsString();
             String rateUS =jsonUS.get(ResponseConstant.RATE).getAsString();
             coinDesk.setType(codeUS);
-            coinDesk.setRate(Integer.parseInt(rateUS));
+            coinDesk.setRate(rateUS);
             coinDesk.setName(ResponseConstant.USD_tw);
             
 
@@ -59,7 +70,7 @@ public class CallCoinDesk {
             String codeGBP =jsonGBP.get(ResponseConstant.CODE).getAsString();
             String rateGBP =jsonGBP.get(ResponseConstant.RATE).getAsString();
             coinDesk.setType(codeGBP);
-            coinDesk.setRate(Integer.parseInt(rateGBP));
+            coinDesk.setRate(rateGBP);
             coinDesk.setName(ResponseConstant.GBP_tw);
 
             
@@ -68,7 +79,7 @@ public class CallCoinDesk {
             String codeEUR =jsonEUR.get(ResponseConstant.CODE).getAsString();
             String rateEUR =jsonEUR.get(ResponseConstant.RATE).getAsString();
             coinDesk.setType(codeEUR);
-            coinDesk.setRate(Integer.parseInt(rateEUR));
+            coinDesk.setRate(rateEUR);
             coinDesk.setName(ResponseConstant.EUR_tw);
 
 

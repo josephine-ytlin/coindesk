@@ -1,5 +1,6 @@
 package com.example.coindesk.entity;
 
+import java.io.Serializable;
 import java.util.Date;
 
 import org.joda.time.DateTime;
@@ -12,23 +13,53 @@ import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 
 @Entity
-@Table
-public class Coindesk {
+@Table(name = "coindesk")
+public class Coindesk implements Serializable {
+	
+    private static final long serialVersionUID = 1L;
+
+
+
+//	private static final Long serialVersionUID = 1L;
+
 	
 	
 	@Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    String type;
+	private long id;
+	
+	@Column(name = "type")
+	private String type;
 
-    @Column
-    String name;
+    @Column(name = "name")
+    private String name;
 
-    @Column
-    Integer rate;
+    @Column(name = "rate")
+    private String rate;
     
-    @Column
-    Date update_date;
+    @Column(name = "updateDate")
+    private String updateDate;
+    
+    
+    
+    public Coindesk(String name, String rate, String type, String updateDate) {
+    	this.name = name;
+    	this.rate = rate;
+    	this.type = type;
+    	this.updateDate =updateDate; 
+    	
+    }
 
+	public Coindesk() {
+	}
+
+	public long getId() {
+		return id;
+	}
+
+	public void setId(long id) {
+		this.id = id;
+	}
 	public String getType() {
 		return type;
 	}
@@ -45,21 +76,23 @@ public class Coindesk {
 		this.name = name;
 	}
 
-	public Integer getRate() {
+	public String getRate() {
 		return rate;
 	}
 
-	public void setRate(Integer rate) {
+	public void setRate(String rate) {
 		this.rate = rate;
 	}
 
-	public Date getUpdate_date() {
-		return update_date;
+	public String getUpdateDate() {
+		return updateDate;
 	}
 
-	public void setUpdate_date(Date update_date) {
-		this.update_date = update_date;
+	public void setUpdateDate(String updateDate) {
+		this.updateDate = updateDate;
 	}
+
+	
     
     
     

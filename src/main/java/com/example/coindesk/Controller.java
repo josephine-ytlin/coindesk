@@ -4,9 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-import org.joda.time.format.DateTimeFormat;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Example;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -23,7 +21,6 @@ import org.springframework.web.client.RestTemplate;
 import com.example.coindesk.repository.CoindeskRepository;
 import com.example.coindesk.util.CoinDeskAPI;
 import com.google.gson.Gson;
-import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.example.coindesk.entity.Coindesk;
 import com.example.coindesk.pojo.constant.ResponseConstant;
@@ -38,9 +35,9 @@ public class Controller {
 	@Autowired
 	static RestTemplate restTemplate = new RestTemplate();
 
-	@GetMapping("/newCoindesk/{id}")
-	private ResponseEntity<Coindesk> getCoinById(@PathVariable("id") long id) {
-		Optional<Coindesk> coinData = cr.findById(id);
+	@GetMapping("/newCoindesk/{type}")
+	private ResponseEntity<Coindesk> getCoin(@PathVariable("type") String type) {
+		Optional<Coindesk> coinData = cr.findByType(type);
 				
 
 		if (coinData.isPresent()) {
@@ -53,17 +50,16 @@ public class Controller {
 	@PostMapping("/newCoindesk")
 	private ResponseEntity<Coindesk> createCoin(@RequestBody Coindesk coindesk) {
 		try {
-			Coindesk newCoindesk = cr.save(
-					new Coindesk(coindesk.getName(), coindesk.getRate(), coindesk.getType(), coindesk.getUpdateDate()));
+			cr.save(new Coindesk(coindesk.getName(), coindesk.getRate(), coindesk.getType(), coindesk.getUpdateDate()));
 			return new ResponseEntity<>(HttpStatus.CREATED);
 		} catch (Exception e) {
 			return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 	}
 
-	@PutMapping("/newCoindesk/{id}")
-	private ResponseEntity<Coindesk> updateCoin(@PathVariable("id") long id, @RequestBody Coindesk coindesk) {
-		Optional<Coindesk> coinData = cr.findById(id);
+	@PutMapping("/newCoindesk/{type}")
+	private ResponseEntity<Coindesk> updateCoin(@PathVariable("type") String type, @RequestBody Coindesk coindesk) {
+		Optional<Coindesk> coinData = cr.findByType(type);
 
 		if (coinData.isPresent()) {
 			Coindesk newCoindesk = coinData.get();
@@ -79,10 +75,11 @@ public class Controller {
 		}
 	}
 
-	@DeleteMapping("/newCoindesk")
-	private ResponseEntity<HttpStatus> deleteAllCoin() {
+	@DeleteMapping("/newCoindesk/{type}")
+	private ResponseEntity<HttpStatus> deleteCoin(@PathVariable("type") String type) {
 		try {
-			cr.deleteAll();
+
+			cr.deleteByType(type);
 			return new ResponseEntity<>(HttpStatus.NO_CONTENT);
 		} catch (Exception e) {
 			return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);

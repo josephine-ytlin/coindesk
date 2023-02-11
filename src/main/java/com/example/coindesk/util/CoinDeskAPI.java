@@ -1,28 +1,13 @@
 package com.example.coindesk.util;
 
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
-import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
-import java.util.Date;
-import java.util.Locale;
-
-import org.joda.time.DateTime;
 import org.joda.time.format.DateTimeFormat;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.client.RestTemplate;
-
-import com.google.gson.Gson;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 
-import jakarta.xml.bind.DatatypeConverter;
-
 import com.example.coindesk.pojo.constant.ResponseConstant;
 import com.example.coindesk.entity.Coindesk;
-import java.time.format.DateTimeFormatter;
 
 
 

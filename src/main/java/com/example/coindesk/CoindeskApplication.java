@@ -11,10 +11,5 @@ public class CoindeskApplication {
 	public static void main(String[] args) {
 		SpringApplication.run(CoindeskApplication.class, args);
 	}
-	@Bean
-	public RestTemplate getRestTemplate() {
-		
-		return new RestTemplate();
-	   }
 
 }

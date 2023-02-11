@@ -1,0 +1,5 @@
+CREATE TABLE Coindesk
+( type VARCHAR(255)  PRIMARY KEY, 
+name VARCHAR(255), 
+rate VARCHAR(255), 
+updateDate VARCHAR(255));

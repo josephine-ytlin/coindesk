@@ -1,5 +1,5 @@
 
-## Coindesk CRUD RESTful API & Unit tests using Spring-boot, JUnit and Maven
+## Coindesk CRUD RESTful API & Unit tests using Spring-boot, JUnit and Maven with H2 database ORM.
 - Endpoints:
   - GET `/myapp/originalCoindesk` : **return** coindesk API data.
   - GET `/myapp/newCoindesk` : **return** transformed coindesk API data contained: 

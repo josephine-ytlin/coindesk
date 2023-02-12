@@ -3,7 +3,7 @@
 ##### coindesk CRUD RESTful API using Spring-boot and Maven
 
 #### Endpoints:
-##### &emsp; GET [^/myapp/originalCoindesk]: **return** coindesk API data.
+##### &emsp; GET [^ /myapp/originalCoindesk]: **return** coindesk API data.
 ##### &emsp; GET /myapp/newCoindesk : **return** transformed coindesk API data contained: id/name/rate/type/updateDate.
 ##### &emsp; GET /myapp/newCoindesk/{type} : get one coin information by Type, **return** id/name/rate/type/updateDate.
 ##### &emsp; POST /myapp/newCoindesk : create a new coin data, **required** id/name/rate/type/updateDate.

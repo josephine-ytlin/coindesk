@@ -1,61 +1,34 @@
 package com.example.coindesk;
 
-import static org.junit.jupiter.api.Assertions.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-import org.junit.Before;
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
-import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
-import org.springframework.mock.web.MockHttpServletResponse;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
-import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
-import org.springframework.test.context.junit4.SpringRunner;
-import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.RequestBuilder;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
-import org.springframework.test.web.servlet.setup.MockMvcBuilders;
-import org.springframework.web.context.WebApplicationContext;
+import com.example.coindesk.entity.Coindesk;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.ObjectWriter;
 
-import com.example.coindesk.repository.CoindeskRepository;
-
-
-
-//@RunWith(SpringJUnit4ClassRunner.class)
-//@SpringBootTest(classes = CoindeskApplication.class)
-//@WebAppConfiguration
-//@WebMvcTest(Controller.class)
 
 
 @ExtendWith(SpringExtension.class)
 @AutoConfigureMockMvc
 @SpringBootTest
 public class ControllerTest{
-//	
-//	@Autowired
-//	@MockBean
-//	CoindeskRepository cr;
-//	
-//	@Autowired
-//	private WebApplicationContext webApplicationContext;
+
+    @Autowired
+    public static ObjectMapper objectMapper = new ObjectMapper();
 	
 	@Autowired
 	public MockMvc mvc;
-
-//	@Before
-//	public void setUpBeforeClass() throws Exception {
-//		mvc = MockMvcBuilders.webAppContextSetup(webApplicationContext).build();
-//	}
 	
 	@Test
 	void getCointest() throws Exception {
@@ -64,8 +37,56 @@ public class ControllerTest{
 		
 	}
 	
+	@Test
+	void createCoinTest() throws Exception {
+		Coindesk testCoin = new Coindesk(
+				"發大財", 
+				"66666", 
+				"MONEY", 
+				"2023/03/01 00:00:00");
+		ObjectWriter ow = objectMapper.writer().withDefaultPrettyPrinter();
+		String json = ow.writeValueAsString(testCoin);
+		
+		RequestBuilder request = MockMvcRequestBuilders
+				.post("/myapp/newCoindesk")
+				.content(json)
+                .contentType(MediaType.APPLICATION_JSON);
+		mvc.perform(request).andExpect(status().isCreated());
+
+		
+	}
 	
+	@Test
+	void updateCoinTest() throws Exception {
+		
+		String type = "USD";
+		
+		Coindesk updateUsCoin = new Coindesk(
+				"美金", 
+				"66666", 
+				"USD", 
+				"2023/03/01 00:00:00");
+		
+		ObjectWriter ow = objectMapper.writer().withDefaultPrettyPrinter();
+		String json = ow.writeValueAsString(updateUsCoin);
+		
+		RequestBuilder request = MockMvcRequestBuilders.put("/myapp/newCoindesk/{type}", type)
+				.content(json)
+                .contentType(MediaType.APPLICATION_JSON);
+		mvc.perform(request).andDo(print()).andExpect(status().isOk());
+
+
+		
+	}
 	
+	@Test
+	void deleteCoinTest() throws Exception {
+		String type = "USD";
+
+		RequestBuilder request = MockMvcRequestBuilders.delete("/myapp/newCoindesk/{type}", type);
+		mvc.perform(request).andExpect(status().isNoContent());
+		
+	}
 	
 	@Test
 	void getOriginalDataTest() throws Exception {

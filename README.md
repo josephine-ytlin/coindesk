@@ -1,11 +1,9 @@
-# coindesk
 
-##### coindesk CRUD RESTful API using Spring-boot and Maven
-
-#### Endpoints:
-##### &emsp; GET [^ /myapp/originalCoindesk]: **return** coindesk API data.
-##### &emsp; GET /myapp/newCoindesk : **return** transformed coindesk API data contained: id/name/rate/type/updateDate.
-##### &emsp; GET /myapp/newCoindesk/{type} : get one coin information by Type, **return** id/name/rate/type/updateDate.
-##### &emsp; POST /myapp/newCoindesk : create a new coin data, **required** id/name/rate/type/updateDate.
-##### &emsp; PUT /myapp/newCoindesk/{type} : update an existed coin data, **required** id/name/rate/type/updateDate.
-##### &emsp; DELETE /myapp/newCoindesk/{type} : delete one coin information by Type. 
+## Coindesk CRUD RESTful API & Unit tests using Spring-boot, JUnit and Maven
+- Endpoints:
+  - GET `/myapp/originalCoindesk` : **return** coindesk API data.
+  - GET `/myapp/newCoindesk` : **return** transformed coindesk API data contained: id/name/rate/type/updateDate.
+  - GET `/myapp/newCoindesk/{type}` : get one coin information by Type, **return** id/name/rate/type/updateDate.
+  - POST `/myapp/newCoindesk` : create a new coin data, **required** id/name/rate/type/updateDate.
+  - PUT `/myapp/newCoindesk/{type}` : update an existed coin data, **required** id/name/rate/type/updateDate.
+  - DELETE `/myapp/newCoindesk/{type}` : delete one coin information by Type. 

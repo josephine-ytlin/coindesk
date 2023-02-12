@@ -98,7 +98,7 @@ public class Controller {
         	
             JsonObject json = new Gson().fromJson(objects, JsonObject.class);
 
-            Coindesk usCoin= CoinDeskAPI.setCoin(json, ResponseConstant.USD, ResponseConstant.USD_tw);
+            Coindesk usdCoin= CoinDeskAPI.setCoin(json, ResponseConstant.USD, ResponseConstant.USD_tw);
             Coindesk gbpCoin= CoinDeskAPI.setCoin(json, ResponseConstant.GBP, ResponseConstant.GBP_tw);
             Coindesk eurCoin= CoinDeskAPI.setCoin(json, ResponseConstant.EUR, ResponseConstant.EUR_tw);
 
@@ -106,28 +106,48 @@ public class Controller {
         	
         	if (coinData.isEmpty()) {
         	
-				allCoin.add(usCoin);
+				allCoin.add(usdCoin);
 				allCoin.add(gbpCoin);
 				allCoin.add(eurCoin);
 				cr.saveAll(allCoin);
 				
         	}else {
-        		coinData.get(0).setName(usCoin.getName());
-        		coinData.get(0).setRate(usCoin.getRate());
-        		coinData.get(0).setType(usCoin.getType());
-        		coinData.get(0).setUpdateDate(usCoin.getUpdateDate());
+        		Optional<Coindesk> oldCoinUSD = cr.findByType(ResponseConstant.USD);
+        		Optional<Coindesk> oldCoinGBP = cr.findByType(ResponseConstant.GBP);
+        		Optional<Coindesk> oldCoinEUR = cr.findByType(ResponseConstant.EUR);
         		
-        		coinData.get(1).setName(gbpCoin.getName());
-        		coinData.get(1).setRate(gbpCoin.getRate());
-        		coinData.get(1).setType(gbpCoin.getType());
-        		coinData.get(1).setUpdateDate(gbpCoin.getUpdateDate());
+        		if (oldCoinUSD.isPresent()) {
+        			
+        			Coindesk newCoindesk = oldCoinUSD.get();
+        			newCoindesk.setName(usdCoin.getName());
+        			newCoindesk.setRate(usdCoin.getRate());
+        			newCoindesk.setType(usdCoin.getType());
+        			newCoindesk.setUpdateDate(usdCoin.getUpdateDate());
+        		}else {
+        			cr.save(usdCoin);
+        		}
         		
-        		coinData.get(2).setName(eurCoin.getName());
-        		coinData.get(2).setRate(eurCoin.getRate());
-        		coinData.get(2).setType(eurCoin.getType());
-        		coinData.get(2).setUpdateDate(eurCoin.getUpdateDate());
+        		if (oldCoinGBP.isPresent()) {
+        			
+        			Coindesk newCoindesk = oldCoinGBP.get();
+        			newCoindesk.setName(gbpCoin.getName());
+        			newCoindesk.setRate(gbpCoin.getRate());
+        			newCoindesk.setType(gbpCoin.getType());
+        			newCoindesk.setUpdateDate(gbpCoin.getUpdateDate());
+        		}else {
+        			cr.save(gbpCoin);
+        		}
         		
-        		cr.saveAll(coinData);
+        		if (oldCoinEUR.isPresent()) {
+        			
+        			Coindesk newCoindesk = oldCoinEUR.get();
+        			newCoindesk.setName(eurCoin.getName());
+        			newCoindesk.setRate(eurCoin.getRate());
+        			newCoindesk.setType(eurCoin.getType());
+        			newCoindesk.setUpdateDate(eurCoin.getUpdateDate());
+        		}else {
+        			cr.save(eurCoin);
+        		}
         		
             }
            
@@ -140,19 +160,17 @@ public class Controller {
 	}
 
 	@GetMapping("/newCoindesk")
-	private ResponseEntity<List<Coindesk>> getAllCoin(@RequestParam(required = false) String type) {
+	private ResponseEntity<List<Coindesk>> getAllCoin() {
 		try {
 			List<Coindesk> cd = new ArrayList<Coindesk>();
 
-			if (type == null) {
 				cr.findAll().forEach(cd::add);
-			}
-
 			if (cd.isEmpty()) {
 				return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-			}
+			}else {
 
 			return new ResponseEntity<>(cd, HttpStatus.OK);
+			}
 		} catch (Exception e) {
 			return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
 		}

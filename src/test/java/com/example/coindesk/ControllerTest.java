@@ -98,25 +98,9 @@ public class ControllerTest{
 	
 	@Test
 	void getAllCoinTest() throws Exception {
-		
-//		mockMvc.perform(
-//                MockMvcRequestBuilders
-//                        .delete("/data/domain")
-//                        .content(objectMapper.writeValueAsString(dataDomain))
-//                        .contentType(MediaType.APPLICATION_JSON)
-//                        .accept(MediaType.APPLICATION_JSON))
-//                .andDo(print())
-//                .andExpect(status().isOk());
-		
-		
-		
+	
 		RequestBuilder request = MockMvcRequestBuilders.get("/myapp/newCoindesk");
 		mvc.perform(request).andDo(print()).andExpect(status().isOk());
-//				;
-//		MockHttpServletResponse response = result.getResponse();
-//		System.out.println(response.getContentAsString());
-//
-//		assertEquals(200,response.getStatus());
 	}
 
 }
